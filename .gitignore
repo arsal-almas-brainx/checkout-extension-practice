@@ -4,3 +4,4 @@ dist/
 .shopify/
 *.wasm
 .DS_Store
+.playwright-mcp/
