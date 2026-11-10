@@ -25,7 +25,6 @@ import {
   useDeliveryGroups,
   useInstructions,
   useNote,
-  useShippingAddress,
 } from '@shopify/ui-extensions/checkout/preact';
 
 export default function extension() {
@@ -46,7 +45,20 @@ function DeliveryTiming() {
   // (different fulfillment locations, digital vs physical), so never assume
   // groups[0] is the whole story.
   const deliveryGroups = useDeliveryGroups();
-  const shippingAddress = useShippingAddress();
+
+  // ⚠️ PROTECTED CUSTOMER DATA. An earlier version of this lesson called
+  // `useShippingAddress()` to print "Shipping to Karachi". It typechecked and
+  // built fine — then threw at runtime in a real checkout:
+  //
+  //   ScopeNotGrantedError: Using shipping address requires having shipping
+  //   address permissions granted to your app.
+  //
+  // Address, name, email and phone are "protected customer data". Reading
+  // them needs access requested in the Dev Dashboard (App › API access ›
+  // Protected customer data), and for public apps, Shopify's review. The
+  // throw takes down the WHOLE target — here it also killed the delivery
+  // instructions field below. Lesson: only read buyer PII you truly need,
+  // and test in a real checkout, because the type system can't catch this.
 
   // ⚠️ The trap here: `selectedDeliveryOption` is a *reference* — it only
   // carries a `handle`, not a title or price. To get the human-readable
@@ -83,8 +95,7 @@ function DeliveryTiming() {
       ) : null}
 
       <s-text color="subdued">
-        Shipping to {shippingAddress?.city ?? 'your address'} —{' '}
-        {titles.filter(Boolean).join(', ')}
+        Selected shipping: {titles.filter(Boolean).join(', ')}
       </s-text>
     </s-stack>
   );

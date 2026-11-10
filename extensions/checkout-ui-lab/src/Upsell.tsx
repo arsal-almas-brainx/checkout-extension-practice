@@ -24,6 +24,7 @@ import {
   useCartLines,
   useInstructions,
   useLanguage,
+  useLocalizationCountry,
 } from '@shopify/ui-extensions/checkout/preact';
 
 export default function extension() {
@@ -50,8 +51,14 @@ interface ProductsQuery {
 
 // Keep queries small: checkout is performance-sensitive, and every field you
 // request is latency the buyer waits through.
+//
+// ⚠️ `@inContext(country:)` is what makes prices come back in the BUYER'S
+// market currency. Without it the Storefront API answers in the shop's
+// default currency, so a Pakistani checkout in PKR shows "US$7.68" next to
+// "Rs 2,200" — a real bug this lesson hit on its first test run.
 const PRODUCTS_QUERY = `#graphql
-  query UpsellProducts($first: Int!) {
+  query UpsellProducts($first: Int!, $country: CountryCode)
+  @inContext(country: $country) {
     products(first: $first, sortKey: BEST_SELLING) {
       nodes {
         id
@@ -71,6 +78,7 @@ function Extension() {
   const instructions = useInstructions();
   const applyCartLinesChange = useApplyCartLinesChange();
   const language = useLanguage();
+  const country = useLocalizationCountry()?.isoCode;
 
   const [products, setProducts] = useState<Product[] | null>(null);
   const [adding, setAdding] = useState(false);
@@ -78,8 +86,10 @@ function Extension() {
 
   // Fetch once on mount. Do NOT put `query` in a render path without an
   // effect — it would refetch on every cart change.
+  // Refetch when the buyer's country changes (they edit their address), since
+  // that can move them to a different market and currency.
   useEffect(() => {
-    query<ProductsQuery>(PRODUCTS_QUERY, {variables: {first: 10}})
+    query<ProductsQuery>(PRODUCTS_QUERY, {variables: {first: 10, country}})
       .then(({data, errors}) => {
         if (errors?.length) console.error('Upsell query failed', errors);
         setProducts(data?.products.nodes ?? []);
@@ -88,16 +98,20 @@ function Extension() {
         console.error('Upsell query failed', err);
         setProducts([]);
       });
-  }, [query]);
+  }, [query, country]);
 
   // Pick the first in-stock product the buyer does NOT already have.
+  // Compare PRODUCT ids, not variant ids: offering "size M" of the shirt that
+  // is already in the cart as "size L" is not an upsell, it's a duplicate.
   // Recomputed on every render, so adding the offer swaps in the next one.
-  const inCart = new Set(cartLines.map((line) => line.merchandise.id));
+  const productsInCart = new Set(
+    cartLines.map((line) => line.merchandise.product.id),
+  );
   const offer = products
     ?.map((product) => ({product, variant: product.variants.nodes[0]}))
     .find(
-      ({variant}) =>
-        variant && variant.availableForSale && !inCart.has(variant.id),
+      ({product, variant}) =>
+        variant && variant.availableForSale && !productsInCart.has(product.id),
     );
 
   if (!instructions.lines.canAddCartLine) return null;
