@@ -19,8 +19,12 @@
 import '@shopify/ui-extensions/preact';
 import type {} from '@shopify/ui-extensions/purchase.checkout.shipping-option-list.render-after';
 import {render} from 'preact';
+import {useState} from 'preact/hooks';
 import {
+  useApplyNoteChange,
   useDeliveryGroups,
+  useInstructions,
+  useNote,
   useShippingAddress,
 } from '@shopify/ui-extensions/checkout/preact';
 
@@ -29,6 +33,15 @@ export default function extension() {
 }
 
 function Extension() {
+  return (
+    <s-stack gap="base">
+      <DeliveryTiming />
+      <DeliveryInstructions />
+    </s-stack>
+  );
+}
+
+function DeliveryTiming() {
   // One delivery group per shipment. A cart can split into several groups
   // (different fulfillment locations, digital vs physical), so never assume
   // groups[0] is the whole story.
@@ -74,5 +87,62 @@ function Extension() {
         {titles.filter(Boolean).join(', ')}
       </s-text>
     </s-stack>
+  );
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// LESSON 7 · The order NOTE vs cart ATTRIBUTES.
+//
+// Lesson 2 stored the gift note as a cart attribute (key/value, many per
+// order, mostly for apps and Order Printer). The order *note* is different:
+// ONE free-text field per order, shown prominently on the order page in admin
+// and on packing slips. That makes it the right home for "leave at the back
+// door" — the warehouse and courier actually see it.
+//
+// Because there is only one note, writing it OVERWRITES whatever was there
+// (including a note the buyer typed in the cart). In a real app, prefer an
+// attribute if other tools also write the note.
+// ───────────────────────────────────────────────────────────────────────────
+function DeliveryInstructions() {
+  const savedNote = useNote();
+  const applyNoteChange = useApplyNoteChange();
+  const instructions = useInstructions();
+
+  const [value, setValue] = useState(savedNote ?? '');
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  // Some checkouts (e.g. draft orders) lock the note. Hide the field rather
+  // than show one that can never save.
+  if (!instructions.notes.canUpdateNote) return null;
+
+  async function save(next: string) {
+    setError(undefined);
+    const trimmed = next.trim();
+
+    // Clearing the field should remove the note, not save an empty string.
+    const result = await applyNoteChange(
+      trimmed
+        ? {type: 'updateNote', note: trimmed}
+        : {type: 'removeNote'},
+    );
+
+    if (result.type === 'error') {
+      setError(result.message ?? 'We could not save your instructions.');
+    }
+  }
+
+  return (
+    <s-text-area
+      label="Delivery instructions (optional), e.g. gate code"
+      rows={2}
+      maxLength={250}
+      value={value}
+      error={error}
+      onChange={(event: Event) => {
+        const next = (event.target as HTMLTextAreaElement).value;
+        setValue(next);
+        void save(next);
+      }}
+    />
   );
 }

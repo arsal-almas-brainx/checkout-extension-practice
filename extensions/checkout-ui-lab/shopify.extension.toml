@@ -13,7 +13,7 @@ handle = "checkout-ui-lab"
   # Capabilities are opt-in. Turn on only what you use — each one is a
   # permission the merchant sees when they install the app.
   [extensions.capabilities]
-  api_access     = true   # read cart/customer data via the `shopify` global
+  api_access     = true   # Storefront API `query` + cart data hooks
   block_progress = true   # allowed to stop the buyer advancing (Lesson 3)
   network_access = false  # set true only if you fetch() an external API
 
@@ -30,6 +30,12 @@ handle = "checkout-ui-lab"
   [[extensions.targeting]]
   target = "purchase.checkout.shipping-option-list.render-after"
   module = "./src/DeliveryNotes.tsx"
+
+  # ── Lesson 6: upsell (static, right under the cart lines) ─────────────────
+  # Uses the Storefront API via `query`, which needs api_access = true above.
+  [[extensions.targeting]]
+  target = "purchase.checkout.cart-line-list.render-after"
+  module = "./src/Upsell.tsx"
 
   # ── Lesson 5: post-purchase (Thank you page) ──────────────────────────────
   [[extensions.targeting]]
