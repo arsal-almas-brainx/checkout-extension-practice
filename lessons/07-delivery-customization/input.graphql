@@ -1,0 +1,22 @@
+# Ask for the least you need. Functions run on every rate refresh — every
+# address edit, every cart change — so this query is on a hot path.
+
+query CartDeliveryOptionsTransformRunInput {
+  cart {
+    deliveryGroups {
+      deliveryOptions {
+        handle          # the ONLY way to address an option in an operation
+        title           # carrier-provided name, often ugly
+        cost {
+          amount
+        }
+      }
+
+      deliveryAddress {
+        address1
+        address2
+        provinceCode
+      }
+    }
+  }
+}

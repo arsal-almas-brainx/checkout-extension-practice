@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(shopify app info)",
+      "Bash(shopify app build)",
+      "Bash(shopify app function typegen)",
+      "Bash(shopify app function run:*)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm install)",
+      "Bash(git status)",
+      "Bash(git diff:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true
+}

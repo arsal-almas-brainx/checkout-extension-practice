@@ -1,0 +1,13 @@
+{
+  "name": "checkout-extensions-lab",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Hands-on lab for Shopify checkout extensions (API 2026-07)",
+  "workspaces": ["extensions/*"],
+  "scripts": {
+    "dev": "shopify app dev",
+    "build": "shopify app build",
+    "deploy": "shopify app deploy",
+    "info": "shopify app info"
+  }
+}

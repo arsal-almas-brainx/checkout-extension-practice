@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Checkout UI extension — the manifest.
+# The CLI adds a `uid = "..."` line automatically on first build. Leave it.
+# ─────────────────────────────────────────────────────────────────────────────
+api_version = "2026-07"
+
+[[extensions]]
+uid = "e44f542e-be92-5b07-09a8-a1be34b048172937de8c"
+type   = "ui_extension"
+name   = "Checkout UI Lab"
+handle = "checkout-ui-lab"
+
+  # Capabilities are opt-in. Turn on only what you use — each one is a
+  # permission the merchant sees when they install the app.
+  [extensions.capabilities]
+  api_access     = true   # read cart/customer data via the `shopify` global
+  block_progress = true   # allowed to stop the buyer advancing (Lesson 3)
+  network_access = false  # set true only if you fetch() an external API
+
+  # ── Lesson 1 + 2: a merchant-placeable block ──────────────────────────────
+  # `purchase.checkout.block.render` is a DYNAMIC target: it does not appear
+  # anywhere until the merchant drags it into place in the checkout editor.
+  [[extensions.targeting]]
+  target = "purchase.checkout.block.render"
+  module = "./src/Checkout.tsx"
+
+  # ── Lesson 4: a STATIC target ─────────────────────────────────────────────
+  # Static targets pin to a fixed spot and render automatically, no editor
+  # placement needed. Great for "must always appear here" content.
+  [[extensions.targeting]]
+  target = "purchase.checkout.shipping-option-list.render-after"
+  module = "./src/DeliveryNotes.tsx"
+
+  # ── Lesson 5: post-purchase (Thank you page) ──────────────────────────────
+  [[extensions.targeting]]
+  target = "purchase.thank-you.block.render"
+  module = "./src/ThankYou.tsx"
+
+  # ── Merchant-configurable settings ────────────────────────────────────────
+  # These render as form fields in the checkout editor. Read them at runtime
+  # via `shopify.settings.value.<key>`. This is how you make ONE extension
+  # reusable instead of hardcoding values.
+  [extensions.settings]
+
+    [[extensions.settings.fields]]
+    key  = "free_shipping_threshold"
+    type = "number_integer"
+    name = "Free shipping threshold"
+    description = "Cart total needed for free shipping, in your store currency."
+
+    [[extensions.settings.fields]]
+    key  = "gift_note_label"
+    type = "single_line_text_field"
+    name = "Gift note label"
+    description = "Label shown above the gift note field."
