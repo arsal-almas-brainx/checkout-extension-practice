@@ -21,7 +21,7 @@
 //        states the intent and is erased cleanly.
 //
 //   3. '@shopify/ui-extensions/checkout/preact'  (the hooks)
-//        useTotalAmount, useSettings, useApplyAttributeChange, and ~70 more.
+//        useSubtotalAmount, useSettings, useApplyAttributeChange, and ~70 more.
 //
 // Note there is NO rich global `shopify` object on the checkout surface — that
 // pattern belongs to the Admin and Customer Account surfaces. On checkout you
@@ -38,7 +38,7 @@ import {
   useBuyerJourneyIntercept,
   useLanguage,
   useSettings,
-  useTotalAmount,
+  useSubtotalAmount,
 } from '@shopify/ui-extensions/checkout/preact';
 
 // Shape of the merchant settings declared in shopify.extension.toml.
@@ -79,7 +79,12 @@ function Extension() {
 // settings as guaranteed is a top source of blank-extension bug reports.
 // ───────────────────────────────────────────────────────────────────────────
 function FreeShippingMeter() {
-  const total = useTotalAmount();
+  // ⚠️ useSubtotalAmount, NOT useTotalAmount. The total includes shipping
+  // and tax, so a buyer at AED 25 of goods + AED 25 shipping was told
+  // "AED 50 of 75" — the shipping fee counted toward FREE shipping. Found
+  // in a live Plus checkout; easy to miss when your test cart has no
+  // shipping rate yet. Free-shipping rules are almost always on the subtotal.
+  const total = useSubtotalAmount();
   const {free_shipping_threshold: threshold} = useSettings<LabSettings>();
   const language = useLanguage();
 
@@ -108,7 +113,7 @@ function FreeShippingMeter() {
     <s-banner tone="info" heading={`${money(remaining)} away from free shipping`}>
       <s-stack gap="small-200">
         <s-progress value={pct} max={100} />
-        <s-text>Cart total: {money(total.amount)}</s-text>
+        <s-text>Subtotal: {money(total.amount)}</s-text>
       </s-stack>
     </s-banner>
   );

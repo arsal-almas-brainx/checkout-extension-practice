@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// LESSON 6  ·  target: purchase.checkout.cart-line-list.render-after
+// LESSON 8  ·  target: purchase.checkout.cart-line-list.render-after
 //
 // A product upsell — the most common "real" checkout extension. It combines
 // three APIs you have not used yet:

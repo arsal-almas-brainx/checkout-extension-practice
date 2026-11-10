@@ -152,9 +152,27 @@ until you place it.
    test cart can straddle — e.g. `100`
 5. **Save**
 
-The free-shipping meter, gift-note field, and terms checkbox all appear. The
-delivery note (Lesson 4) and Thank You block (Lesson 5) are **static** targets
-— they show up on their own, no placement needed.
+6. In the same panel, turn on **Allow app to block checkout**, or the terms
+   checkbox (Lesson 3) shows its error but never actually stops the buyer
+
+The free-shipping meter, gift-note field, and terms checkbox all appear.
+
+Every other lesson needs adding too. Nothing renders in a real checkout until
+a merchant places it, including **static** targets:
+
+| Extension | Target | How to add it |
+|---|---|---|
+| **Upsell offer** (Lesson 8) | static, after the cart lines | Apps → Upsell offer → add to Checkout |
+| **Delivery notes** (Lessons 4 + 9) | static, after the shipping options | Apps → Delivery notes → add to Checkout |
+| **Checkout UI Lab** on Thank you (Lesson 5) | dynamic block | Switch the editor to the Thank you page → Apps → add |
+
+> `shopify app dev` previews render every target without placement. That's
+> convenient, but it's also why "static targets appear on their own" is a
+> myth that survives development.
+
+Checkout-step extensions only render on **Plus** stores (Thank you / Order
+status work on any plan). A Basic dev store can still preview them through
+`shopify app dev`.
 
 ## Step 3 · Read the code, in this order
 
@@ -163,10 +181,12 @@ delivery note (Lesson 4) and Thank You block (Lesson 5) are **static** targets
 | 1 | `extensions/checkout-ui-lab/src/Checkout.tsx` → `FreeShippingMeter` | The three imports and why each exists. Reading data. Merchant settings. |
 | 2 | same file → `GiftNote` | Writing back. Why you must check `result.type`. |
 | 3 | same file → `TermsGate` | Blocking the buyer. `canBlockProgress`. Why setState goes in `perform`. |
-| 4 | `src/DeliveryNotes.tsx` | Static vs dynamic targets. The `selectedDeliveryOption` handle trap. |
-| 5 | `src/ThankYou.tsx` | Post-purchase. `useApi` + `useSubscription`. Why checkout hooks are gone here. |
+| 4 | `extensions/delivery-notes/src/DeliveryNotes.tsx` | Static vs dynamic targets. The `selectedDeliveryOption` handle trap. |
+| 5 | `extensions/checkout-ui-lab/src/ThankYou.tsx` | Post-purchase. `useApi` + `useSubscription`. Why checkout hooks are gone here. |
 | 6 | `lessons/06-validation-function/` | Server-side enforcement. Pure `(input) => output`. |
 | 7 | `lessons/07-delivery-customization/` | Operations model. Renaming and reordering shipping. |
+| 8 | `extensions/upsell-offer/src/Upsell.tsx` | Storefront API `query`, `@inContext` currency, adding cart lines, `useInstructions`. |
+| 9 | `extensions/delivery-notes/src/DeliveryNotes.tsx` → `DeliveryInstructions` | Order note vs attributes. Protected customer data (`ScopeNotGrantedError`). |
 
 `shopify.extension.toml` is commented too — capabilities, targets, and the
 merchant settings schema.

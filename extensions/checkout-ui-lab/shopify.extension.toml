@@ -13,29 +13,24 @@ handle = "checkout-ui-lab"
   # Capabilities are opt-in. Turn on only what you use — each one is a
   # permission the merchant sees when they install the app.
   [extensions.capabilities]
-  api_access     = true   # Storefront API `query` + cart data hooks
+  api_access     = false  # only needed for the Storefront API (see upsell-offer)
   block_progress = true   # allowed to stop the buyer advancing (Lesson 3)
   network_access = false  # set true only if you fetch() an external API
 
-  # ── Lesson 1 + 2: a merchant-placeable block ──────────────────────────────
+  # ── Lesson 1 + 2 + 3: a merchant-placeable block ──────────────────────────
   # `purchase.checkout.block.render` is a DYNAMIC target: it does not appear
   # anywhere until the merchant drags it into place in the checkout editor.
+  #
+  # ⚠️ block_progress above is only a REQUEST. The merchant must also turn on
+  # "Allow app to block checkout" in the block's editor panel, or the
+  # TermsGate in Lesson 3 shows its error but checkout still lets buyers pass.
   [[extensions.targeting]]
   target = "purchase.checkout.block.render"
   module = "./src/Checkout.tsx"
 
-  # ── Lesson 4: a STATIC target ─────────────────────────────────────────────
-  # Static targets pin to a fixed spot and render automatically, no editor
-  # placement needed. Great for "must always appear here" content.
-  [[extensions.targeting]]
-  target = "purchase.checkout.shipping-option-list.render-after"
-  module = "./src/DeliveryNotes.tsx"
-
-  # ── Lesson 6: upsell (static, right under the cart lines) ─────────────────
-  # Uses the Storefront API via `query`, which needs api_access = true above.
-  [[extensions.targeting]]
-  target = "purchase.checkout.cart-line-list.render-after"
-  module = "./src/Upsell.tsx"
+  # Lessons 4, 8 and 9 (static targets) live in their OWN extensions:
+  # extensions/delivery-notes and extensions/upsell-offer. See the comment at
+  # the top of delivery-notes/shopify.extension.toml for why.
 
   # ── Lesson 5: post-purchase (Thank you page) ──────────────────────────────
   [[extensions.targeting]]

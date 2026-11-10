@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lessons 4 + 9 · Delivery notes — a STATIC-target extension.
+#
+# Why is this its own extension instead of one more [[extensions.targeting]]
+# in checkout-ui-lab? Because of how the checkout editor works:
+#
+#   • Static targets do NOT render by themselves. Shopify's docs: merchants
+#     "use the checkout and accounts editor to activate and place the
+#     extension". Deploying is not enough.
+#   • The editor lists each EXTENSION once. An instance renders ONE target.
+#     When an extension mixes a dynamic block with static targets, "Add block"
+#     always places the dynamic one, and the static slots are hard to reach.
+#   • Give a static target its own extension and the editor has exactly one
+#     place to put it: add "Delivery notes" and it lands after the shipping
+#     options.
+#
+# (In `shopify app dev` previews, every target renders without placement.
+#  That's why this looked "automatic" during development — it isn't in a
+#  real checkout.)
+# ─────────────────────────────────────────────────────────────────────────────
+api_version = "2026-07"
+
+[[extensions]]
+type   = "ui_extension"
+name   = "Delivery notes"
+handle = "delivery-notes"
+uid = "88dd2f2d-9091-3a4d-98db-82bef443997d9e18d0b1"
+
+  # No capabilities needed: reading delivery groups and writing the order
+  # note are standard checkout APIs. (Reading the shipping ADDRESS would need
+  # protected-customer-data access — see the comment in DeliveryNotes.tsx.)
+
+  [[extensions.targeting]]
+  target = "purchase.checkout.shipping-option-list.render-after"
+  module = "./src/DeliveryNotes.tsx"

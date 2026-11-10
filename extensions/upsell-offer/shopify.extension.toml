@@ -1,0 +1,19 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lesson 8 · Upsell offer — a STATIC-target extension, right under the cart
+# lines. Split out of checkout-ui-lab so the checkout editor can place it;
+# delivery-notes/shopify.extension.toml explains why.
+# ─────────────────────────────────────────────────────────────────────────────
+api_version = "2026-07"
+
+[[extensions]]
+type   = "ui_extension"
+name   = "Upsell offer"
+handle = "upsell-offer"
+uid = "8ff9cced-1b31-c305-3b10-526580549f5e6864bc1a"
+
+  [extensions.capabilities]
+  api_access = true   # needed for the Storefront API `query` in Upsell.tsx
+
+  [[extensions.targeting]]
+  target = "purchase.checkout.cart-line-list.render-after"
+  module = "./src/Upsell.tsx"

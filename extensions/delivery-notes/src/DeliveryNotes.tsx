@@ -9,8 +9,14 @@
 //     Maximum flexibility; you cannot rely on it existing or on its position.
 //
 //   purchase.checkout.shipping-option-list.render-after → STATIC.
-//     Renders automatically, always directly after the shipping options.
-//     No editor step, so it cannot be misplaced or forgotten.
+//     Fixed position: always directly after the shipping options, and it
+//     can't be moved anywhere else.
+//
+// ⚠️ A common misconception (this lab believed it at first): "static" does
+// NOT mean "renders without setup". The merchant still has to ADD the
+// extension in the checkout editor. Only `shopify app dev` previews render
+// every target unplaced, which is exactly why the myth survives development.
+// That's also why this lesson is its own extension: see the toml next door.
 //
 // Rule of thumb: if the content is only meaningful beside one specific
 // checkout element, use that element's static target. Otherwise use a block
@@ -102,7 +108,7 @@ function DeliveryTiming() {
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// LESSON 7 · The order NOTE vs cart ATTRIBUTES.
+// LESSON 9 · The order NOTE vs cart ATTRIBUTES.
 //
 // Lesson 2 stored the gift note as a cart attribute (key/value, many per
 // order, mostly for apps and Order Printer). The order *note* is different:
