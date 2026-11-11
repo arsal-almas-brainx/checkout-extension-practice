@@ -1,0 +1,4 @@
+{
+  "name": "ZIP code blocker",
+  "description": "Blocks checkout for ZIP / postal codes listed in the validation's metafield"
+}

@@ -1,0 +1,4 @@
+{
+  "name": "Bundle builder (Lesson 15)",
+  "description": "Expands a kit product into its component products using the custom.bundle_components metafield"
+}

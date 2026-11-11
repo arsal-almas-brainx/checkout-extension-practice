@@ -1,0 +1,34 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lesson 12 — Payment Customization Function
+#
+# Hide / rename / reorder payment methods. The payment methods themselves
+# arrive in the input (`paymentMethods`) — you can only act on methods the
+# store already offers; a Function can't invent a new one.
+# ─────────────────────────────────────────────────────────────────────────────
+query CartPaymentMethodsTransformRunInput {
+  cart {
+    cost {
+      totalAmount {
+        amount
+      }
+    }
+    deliveryGroups {
+      deliveryAddress {
+        address1
+      }
+    }
+  }
+  paymentMethods {
+    # The id is what every operation targets. The NAME is the only way to
+    # recognise a manual method like "Cash on Delivery (COD)" — match loosely.
+    id
+    name
+  }
+  presentmentCurrencyRate
+  # Lesson 13: rules live on the payment customization's own metafield.
+  paymentCustomization {
+    metafield(namespace: "$app:payment-rules", key: "function-configuration") {
+      jsonValue
+    }
+  }
+}

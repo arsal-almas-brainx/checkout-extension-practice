@@ -1,0 +1,34 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lesson 16 — Fulfillment Constraints Function
+#
+# Rule: products tagged "fragile" must ship from the specialist
+# "Fragile Goods Warehouse" location (it has the bubble wrap).
+#
+# Both the tag and the location name come from INPUT VARIABLES (see the
+# toml). Defaults below are used when the metafield is missing.
+# ─────────────────────────────────────────────────────────────────────────────
+query CartFulfillmentConstraintsGenerateRunInput(
+  $fragileTags: [String!] = ["fragile"]
+  $locationNames: [String!] = ["Fragile Goods Warehouse"]
+) {
+  cart {
+    deliverableLines {
+      id
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          product {
+            # You can't read a product's tags directly in a Function — only
+            # ask "does it have ANY of these?" (or hasTags for a per-tag list).
+            isFragile: hasAnyTag(tags: $fragileTags)
+          }
+        }
+      }
+    }
+  }
+  # Only the locations whose name matches — not every location in the store.
+  locations(names: $locationNames) {
+    id
+    name
+  }
+}

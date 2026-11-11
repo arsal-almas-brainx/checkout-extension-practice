@@ -1,0 +1,29 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "zip": "10001"
+            }
+          }
+        ]
+      },
+      "validation": {
+        "metafield": null
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lesson 14 — an ADMIN settings UI for a Function
+#
+# Renders inside Settings → Checkout → Checkout rules when the merchant adds
+# or edits the "ZIP code blocker" rule. Its only job: read and write the JSON
+# metafield the zip-blocker Function reads. The link between the two is
+# `[extensions.ui] handle = "zip-blocker-settings"` in zip-blocker's toml.
+# ─────────────────────────────────────────────────────────────────────────────
+api_version = "2026-07"
+
+[[extensions]]
+name = "t:name"
+handle = "zip-blocker-settings"
+type = "ui_extension"
+uid = "73cc768a-4f13-9f03-d7dc-b96f127261f181435633"
+
+[[extensions.targeting]]
+module = "./src/ValidationSettings.jsx"
+target = "admin.settings.validation.render"

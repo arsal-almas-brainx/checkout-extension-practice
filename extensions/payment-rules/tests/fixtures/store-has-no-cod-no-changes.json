@@ -1,0 +1,35 @@
+{
+  "payload": {
+    "export": "cart-payment-methods-transform-run",
+    "target": "cart.payment-methods.transform.run",
+    "input": {
+      "cart": {
+        "cost": {
+          "totalAmount": {
+            "amount": "100.0"
+          }
+        },
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "address1": "12 Sheikh Zayed Rd"
+            }
+          }
+        ]
+      },
+      "paymentMethods": [
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/0",
+          "name": "(for testing) Bogus Gateway"
+        }
+      ],
+      "presentmentCurrencyRate": "1.0",
+      "paymentCustomization": {
+        "metafield": null
+      }
+    },
+    "output": {
+      "operations": []
+    }
+  }
+}

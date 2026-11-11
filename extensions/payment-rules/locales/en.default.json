@@ -1,0 +1,4 @@
+{
+  "name": "Payment rules (Lesson 12)",
+  "description": "Hides Cash on Delivery for big orders and PO Boxes, otherwise renames it and moves it first"
+}

@@ -1,0 +1,30 @@
+{
+  "payload": {
+    "export": "cart-fulfillment-constraints-generate-run",
+    "target": "cart.fulfillment-constraints.generate.run",
+    "input": {
+      "cart": {
+        "deliverableLines": [
+          {
+            "id": "gid://shopify/DeliverableCartLine/0",
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "isFragile": false
+              }
+            }
+          }
+        ]
+      },
+      "locations": [
+        {
+          "id": "gid://shopify/Location/2",
+          "name": "Fragile Goods Warehouse"
+        }
+      ]
+    },
+    "output": {
+      "operations": []
+    }
+  }
+}

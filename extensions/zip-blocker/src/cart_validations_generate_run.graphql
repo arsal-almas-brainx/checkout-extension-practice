@@ -1,0 +1,22 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ZIP blocker — a Cart and Checkout Validation Function (extra lesson)
+#
+# The list of blocked ZIP / postal codes is NOT in the code. It lives in a
+# metafield on the validation itself, edited by the merchant in
+# Settings → Checkout → Checkout rules (the zip-blocker-settings admin UI
+# extension writes it). Change the list → behaviour changes, no deploy.
+# ─────────────────────────────────────────────────────────────────────────────
+query CartValidationsGenerateRunInput {
+  cart {
+    deliveryGroups {
+      deliveryAddress {
+        zip
+      }
+    }
+  }
+  validation {
+    metafield(namespace: "$app:zip-blocker", key: "blocked-zips") {
+      jsonValue
+    }
+  }
+}

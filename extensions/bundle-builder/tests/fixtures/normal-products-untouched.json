@@ -1,0 +1,28 @@
+{
+  "payload": {
+    "export": "cart-transform-run",
+    "target": "cart.transform.run",
+    "input": {
+      "cart": {
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/0",
+            "quantity": 1,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/11",
+              "title": "Default Title",
+              "product": {
+                "title": "Lab Test Tee"
+              },
+              "components": null
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": []
+    }
+  }
+}

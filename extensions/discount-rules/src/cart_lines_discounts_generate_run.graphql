@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lesson 10/11 — Discount Function, CART LINES target (product + order classes)
+#
+# One function, many discounts. The SAME code runs for the automatic discount
+# ("Training tiered discount") and for the code discount (TRAIN20). What makes
+# them behave differently is the JSON in each discount's own metafield —
+# Lesson 13: configuration lives in metafields, not in code.
+# ─────────────────────────────────────────────────────────────────────────────
+query CartInput {
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+      }
+    }
+    lines {
+      id
+      quantity
+      cost {
+        subtotalAmount {
+          amount
+        }
+      }
+    }
+  }
+  discount {
+    # Which classes (PRODUCT / ORDER / SHIPPING) the merchant enabled on THIS
+    # discount node. Only emit operations for enabled classes.
+    discountClasses
+    # `$app:` = a namespace reserved for this app. jsonValue arrives parsed.
+    metafield(namespace: "$app:discount-rules", key: "function-configuration") {
+      jsonValue
+    }
+  }
+  # Cart amounts are in the BUYER's currency; config is in the shop currency
+  # (AED). Multiply thresholds by this rate before comparing.
+  presentmentCurrencyRate
+}

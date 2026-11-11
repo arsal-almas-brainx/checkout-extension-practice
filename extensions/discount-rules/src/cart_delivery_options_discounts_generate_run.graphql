@@ -1,0 +1,24 @@
+# Lesson 10 — Discount Function, DELIVERY target (shipping class).
+# Same discount node as the cart-lines target, so it reads the same metafield.
+query DeliveryInput {
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+      }
+    }
+    deliveryGroups {
+      id
+      deliveryOptions {
+        deliveryMethodType
+      }
+    }
+  }
+  discount {
+    discountClasses
+    metafield(namespace: "$app:discount-rules", key: "function-configuration") {
+      jsonValue
+    }
+  }
+  presentmentCurrencyRate
+}

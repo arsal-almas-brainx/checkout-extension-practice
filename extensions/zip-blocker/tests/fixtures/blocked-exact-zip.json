@@ -1,0 +1,42 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "zip": "75500"
+            }
+          }
+        ]
+      },
+      "validation": {
+        "metafield": {
+          "jsonValue": {
+            "zips": [
+              "10001",
+              "75500",
+              "SW1A*"
+            ]
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "Sorry, we don't deliver to 75500 yet. Please use a different address.",
+                "target": "$.cart.deliveryGroups[0].deliveryAddress.zip"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

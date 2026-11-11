@@ -1,0 +1,36 @@
+{
+  "payload": {
+    "export": "cart-lines-discounts-generate-run",
+    "target": "cart.lines.discounts.generate.run",
+    "input": {
+      "cart": {
+        "cost": {
+          "subtotalAmount": {
+            "amount": "400.0"
+          }
+        },
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/0",
+            "quantity": 4,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "400.0"
+              }
+            }
+          }
+        ]
+      },
+      "discount": {
+        "discountClasses": [
+          "SHIPPING"
+        ],
+        "metafield": null
+      },
+      "presentmentCurrencyRate": "1.0"
+    },
+    "output": {
+      "operations": []
+    }
+  }
+}

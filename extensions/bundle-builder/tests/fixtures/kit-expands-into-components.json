@@ -1,0 +1,69 @@
+{
+  "payload": {
+    "export": "cart-transform-run",
+    "target": "cart.transform.run",
+    "input": {
+      "cart": {
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/0",
+            "quantity": 2,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/9",
+              "title": "Default Title",
+              "product": {
+                "title": "Training Starter Kit"
+              },
+              "components": {
+                "jsonValue": [
+                  {
+                    "variantId": "gid://shopify/ProductVariant/11",
+                    "quantity": 1
+                  },
+                  {
+                    "variantId": "gid://shopify/ProductVariant/12",
+                    "quantity": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/1",
+            "quantity": 1,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/11",
+              "title": "Default Title",
+              "product": {
+                "title": "Lab Test Tee"
+              },
+              "components": null
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "lineExpand": {
+            "cartLineId": "gid://shopify/CartLine/0",
+            "expandedCartItems": [
+              {
+                "merchandiseId": "gid://shopify/ProductVariant/11",
+                "quantity": 1
+              },
+              {
+                "merchandiseId": "gid://shopify/ProductVariant/12",
+                "quantity": 2
+              }
+            ],
+            "title": "Training Starter Kit"
+          }
+        }
+      ]
+    }
+  }
+}

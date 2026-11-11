@@ -1,0 +1,45 @@
+{
+  "payload": {
+    "export": "cart-payment-methods-transform-run",
+    "target": "cart.payment-methods.transform.run",
+    "input": {
+      "cart": {
+        "cost": {
+          "totalAmount": {
+            "amount": "100.0"
+          }
+        },
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "address1": "PO Box 4521"
+            }
+          }
+        ]
+      },
+      "paymentMethods": [
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/0",
+          "name": "(for testing) Bogus Gateway"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/1",
+          "name": "Cash on Delivery (COD)"
+        }
+      ],
+      "presentmentCurrencyRate": "1.0",
+      "paymentCustomization": {
+        "metafield": null
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "paymentMethodHide": {
+            "paymentMethodId": "gid://shopify/PaymentCustomizationPaymentMethod/1"
+          }
+        }
+      ]
+    }
+  }
+}

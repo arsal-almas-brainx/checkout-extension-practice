@@ -1,0 +1,41 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "zip": "10001"
+            }
+          }
+        ]
+      },
+      "validation": {
+        "metafield": {
+          "jsonValue": {
+            "zips": [
+              "10001"
+            ],
+            "message": "We don't ship to {zip}."
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "We don't ship to 10001.",
+                "target": "$.cart.deliveryGroups[0].deliveryAddress.zip"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

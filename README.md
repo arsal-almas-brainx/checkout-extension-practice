@@ -228,6 +228,22 @@ Two things that trip up nearly everyone:
   a PO Box address shows the Function's error on the Address field even when
   every UI-extension check passes, because it runs on Shopify's servers.
 
+## Step 5b · Part 2: every other Function API (Lessons 10–17)
+
+`lessons/FUNCTIONS-TRAINING.md` is the full guide. It's built, deployed and
+active on arsals-plus-store:
+
+| Lesson | Extension | What it does |
+|---|---|---|
+| 10–11 | `extensions/discount-rules` | Bulk-buy, spend and free-shipping tiers; the same Function also runs the TRAIN20 code |
+| 12 | `extensions/payment-rules` | Hides Cash on Delivery over AED 500 or for PO Boxes; otherwise renames it and moves it first |
+| 13 | all of them | Config in `$app:` metafields; input variables feed `hasAnyTag(tags:)` |
+| — | `extensions/zip-blocker` | Blocks checkout for ZIP / postal codes listed in a metafield |
+| 14 | `extensions/zip-blocker-settings` | Admin screen in Checkout rules to edit that ZIP list |
+| 15 | `extensions/bundle-builder` | Cart transform: the Training Starter Kit expands into its parts |
+| 16 | `extensions/fulfillment-rules` | `fragile` products must ship from Fragile Goods Warehouse |
+| 17 | — | `shopify app function run`, run logs, replay |
+
 ## Step 6 · Ship it
 
 ```bash
@@ -242,10 +258,10 @@ Roughly in order of payoff:
 
 1. **Checkout Branding API** — colors, type, corner radius across checkout, via
    GraphQL. The editor can't reach most of it. Highest visual impact per hour.
-2. **Discount Functions** — `cart.lines.discounts.generate.run`. Any promo logic
-   the native discount engine can't express.
-3. **Payment customization** — hide/rename payment methods. Same operations
-   model as Lesson 7, so it's a short hop.
+2. ~~Discount Functions~~ and ~~Payment customization~~: done in Part 2
+   (Lessons 10–12).
+3. **Discount settings UI**: `admin.discount-details.function-settings.render`,
+   the discount equivalent of Lesson 14.
 4. **Customer Account extensions** — where Order Status now lives.
 5. **Unit testing** — `@shopify/ui-extensions-tester` (2026-04+) tests
    extensions without a browser.

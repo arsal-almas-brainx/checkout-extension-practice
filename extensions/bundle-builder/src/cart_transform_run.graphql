@@ -1,0 +1,34 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lesson 15 — Cart Transform Function (bundles)
+#
+# The buyer adds ONE product ("Training Starter Kit"). In checkout, this
+# Function EXPANDS that line into its component products, so the order,
+# inventory and fulfilment see the real items — while the buyer still pays
+# the kit's price.
+#
+# Which products make up the kit is merchant data: a JSON metafield on the
+# kit's variant, `custom.bundle_components`.
+# ─────────────────────────────────────────────────────────────────────────────
+query CartTransformRunInput {
+  cart {
+    lines {
+      id
+      quantity
+      merchandise {
+        # Merchandise is a union-like interface — __typename is required to
+        # use the `... on ProductVariant` fragment.
+        __typename
+        ... on ProductVariant {
+          id
+          title
+          product {
+            title
+          }
+          components: metafield(namespace: "custom", key: "bundle_components") {
+            jsonValue
+          }
+        }
+      }
+    }
+  }
+}

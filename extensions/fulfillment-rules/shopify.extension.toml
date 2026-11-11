@@ -1,0 +1,23 @@
+api_version = "2026-07"
+
+[[extensions]]
+name = "t:name"
+handle = "fulfillment-rules"
+type = "function"
+uid = "479c054e-cfd8-7228-69d4-0902912f8a03119c4825"
+description = "t:description"
+
+  [[extensions.targeting]]
+  target = "cart.fulfillment-constraints.generate.run"
+  input_query = "src/cart_fulfillment_constraints_generate_run.graphql"
+  export = "cart-fulfillment-constraints-generate-run"
+  # Lesson 13b — INPUT VARIABLES. The JSON in this metafield (on the
+  # fulfillment constraint rule) becomes the $variables of the input query:
+  #   { "fragileTags": ["fragile"], "locationNames": ["Fragile Goods Warehouse"] }
+  # That's how merchant data reaches FIELD ARGUMENTS like hasAnyTag(tags:),
+  # which can't be read from a metafield inside the code.
+  input_variables = { namespace = "$app:fulfillment-rules", key = "function-configuration" }
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
