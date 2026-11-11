@@ -1,0 +1,4 @@
+{
+  "name": "Delivery rules (Lesson 7)",
+  "description": "Renames carrier codes, hides express for PO Boxes, puts the cheapest option first."
+}

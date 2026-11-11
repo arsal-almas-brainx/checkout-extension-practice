@@ -1,0 +1,44 @@
+# The input query defines EXACTLY what your function receives. Nothing else is
+# available at runtime — if you didn't ask for it here, it isn't in `input`.
+#
+# Keep this query minimal. Functions run on every checkout under a strict
+# instruction limit, and every field you request costs input-parsing time.
+# Asking for the whole cart "just in case" is how functions get slow.
+
+query CartValidationsGenerateRunInput {
+  cart {
+    # For the PO Box rule.
+    deliveryGroups {
+      deliveryAddress {
+        address1
+        address2
+      }
+    }
+
+    # For the wholesale minimum-quantity rule.
+    lines {
+      quantity
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          id
+          product {
+            # PRODUCT title, not the variant's: a single-variant product's
+            # variant title is literally "Default Title".
+            title
+            # Metafields are how you read merchant-configured data inside a
+            # Function. There is no admin API access here — a Function is a
+            # pure input -> output transform with no network. If your rule
+            # needs store data, it must arrive through this query.
+            isWholesale: metafield(namespace: "custom", key: "is_wholesale") {
+              value
+            }
+            minimumQuantity: metafield(namespace: "custom", key: "min_quantity") {
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+}

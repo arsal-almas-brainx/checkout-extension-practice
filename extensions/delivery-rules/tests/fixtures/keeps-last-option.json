@@ -1,0 +1,38 @@
+{
+  "payload": {
+    "export": "cart-delivery-options-transform-run",
+    "target": "cart.delivery-options.transform.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryOptions": [
+              {
+                "handle": "exp",
+                "title": "USPS Priority Mail 2-Day",
+                "cost": {
+                  "amount": "30.0"
+                }
+              }
+            ],
+            "deliveryAddress": {
+              "address1": "PO Box 42",
+              "address2": null,
+              "provinceCode": "DU"
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "deliveryOptionRename": {
+            "deliveryOptionHandle": "exp",
+            "title": "Express — arrives in 2 days"
+          }
+        }
+      ]
+    }
+  }
+}

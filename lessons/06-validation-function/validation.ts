@@ -72,15 +72,17 @@ export function cartValidationsGenerateRun(
     if (product.isWholesale?.value !== 'true') continue;
 
     // Metafield values are ALWAYS strings, even numeric ones. Parse, and
-    // guard the parse — a merchant typo like "12 units" would otherwise make
-    // `minimum` NaN, and every comparison against NaN is false, silently
-    // disabling your rule.
+    // guard the parse. parseInt reads LEADING digits, so "12 units" still
+    // gives 12 (fine), but "twelve" or "" gives NaN — and every comparison
+    // against NaN is false, which would silently disable the rule. The
+    // isFinite guard turns that into an explicit "no valid minimum, skip".
+    // (Both cases are pinned by tests in extensions/order-rules/tests.)
     const minimum = Number.parseInt(product.minimumQuantity?.value ?? '', 10);
     if (!Number.isFinite(minimum) || minimum <= 0) continue;
 
     if (line.quantity < minimum) {
       errors.push({
-        message: `${line.merchandise.title} is wholesale only — minimum order is ${minimum} units.`,
+        message: `${product.title} is wholesale only — minimum order is ${minimum} units.`,
         target: '$.cart',
       });
     }

@@ -1,0 +1,45 @@
+{
+  "payload": {
+    "export": "cart-delivery-options-transform-run",
+    "target": "cart.delivery-options.transform.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryOptions": [
+              {
+                "handle": "a",
+                "title": "Courier",
+                "cost": {
+                  "amount": "100.0"
+                }
+              },
+              {
+                "handle": "b",
+                "title": "Courier B",
+                "cost": {
+                  "amount": "25.0"
+                }
+              }
+            ],
+            "deliveryAddress": {
+              "address1": "Sheikh Zayed Road 1",
+              "address2": null,
+              "provinceCode": "DU"
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "deliveryOptionMove": {
+            "deliveryOptionHandle": "b",
+            "index": 0
+          }
+        }
+      ]
+    }
+  }
+}

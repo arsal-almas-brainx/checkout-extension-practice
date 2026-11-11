@@ -101,9 +101,12 @@ export function cartDeliveryOptionsTransformRun(
     // `index` is 0-based and applies to the list AFTER hides. Sorting a copy
     // matters — sort() mutates, and mutating `visible` here would corrupt the
     // renames we just derived from it if this block ever moves above them.
-    const cheapest = [...visible].sort(
-      (a, b) => (a.cost?.amount ?? 0) - (b.cost?.amount ?? 0),
-    )[0];
+    //
+    // ⚠️ `cost.amount` is a `Decimal` scalar, which arrives as a STRING
+    // ("25.0"), not a number. Subtracting strings happens to coerce in plain
+    // JS, but comparing them sorts "100.0" before "25.0". Always Number() it.
+    const price = (o: (typeof visible)[number]) => Number(o.cost?.amount ?? 0);
+    const cheapest = [...visible].sort((a, b) => price(a) - price(b))[0];
 
     if (cheapest && visible[0]?.handle !== cheapest.handle) {
       operations.push({

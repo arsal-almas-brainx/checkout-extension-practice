@@ -22,8 +22,8 @@ Confirm the `target` the CLI wrote is `cart.delivery-options.transform.run`.
 
 ```bash
 cd "/Users/brainxshopifydev/Desktop/Checkout Extenions"
-cp lessons/07-delivery-customization/input.graphql  extensions/delivery-rules/src/
-cp lessons/07-delivery-customization/delivery.ts    extensions/delivery-rules/src/
+cp lessons/07-delivery-customization/input.graphql  extensions/delivery-rules/src/cart_delivery_options_transform_run.graphql
+cp lessons/07-delivery-customization/delivery.ts    extensions/delivery-rules/src/cart_delivery_options_transform_run.ts
 cd extensions/delivery-rules && shopify app function typegen
 ```
 
@@ -31,8 +31,27 @@ Keep whatever export name the CLI generated (`cartDeliveryOptionsTransformRun`).
 
 ## Turn it on
 
-Deploy, then **Settings → Shipping and delivery → Checkout customizations →
-Add customization**. Like validation functions, it is inert until activated.
+Like validation functions, it is inert until activated, and activation is a
+mutation (verified 2026-11): add `write_delivery_customizations` to the app's
+scopes, deploy, approve the update in the store admin, then:
+
+```bash
+shopify app execute -s <store>.myshopify.com --version 2026-07 -q '
+mutation { deliveryCustomizationCreate(deliveryCustomization: {
+  functionHandle: "delivery-rules", title: "Delivery rules", enabled: true}) {
+  deliveryCustomization { id enabled } userErrors { field message } } }'
+```
+
+Afterwards it shows under **Settings → Shipping and delivery** as
+"Delivery rules by <your app>".
+
+**To see it work** your store needs rates with carrier-style names. A fresh
+store usually has one generic rate, so nothing visibly changes. Add e.g.
+"UPS Ground" (15) and "USPS Priority Mail 2-Day" (40) in the market's shipping
+options. Then a street address shows "Standard — 3 to 5 days" first and
+"Express — arrives in 2 days" last, and a PO Box address hides Express.
+
+The finished, tested version lives in `extensions/delivery-rules/`.
 
 ## The one gotcha
 

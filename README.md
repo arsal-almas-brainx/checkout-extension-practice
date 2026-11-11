@@ -183,8 +183,8 @@ status work on any plan). A Basic dev store can still preview them through
 | 3 | same file → `TermsGate` | Blocking the buyer. `canBlockProgress`. Why setState goes in `perform`. |
 | 4 | `extensions/delivery-notes/src/DeliveryNotes.tsx` | Static vs dynamic targets. The `selectedDeliveryOption` handle trap. |
 | 5 | `extensions/checkout-ui-lab/src/ThankYou.tsx` | Post-purchase. `useApi` + `useSubscription`. Why checkout hooks are gone here. |
-| 6 | `lessons/06-validation-function/` | Server-side enforcement. Pure `(input) => output`. |
-| 7 | `lessons/07-delivery-customization/` | Operations model. Renaming and reordering shipping. |
+| 6 | `lessons/06-validation-function/` → built in `extensions/order-rules/` | Server-side enforcement. Pure `(input) => output`. Fixture tests. |
+| 7 | `lessons/07-delivery-customization/` → built in `extensions/delivery-rules/` | Operations model. Renaming, hiding and reordering shipping. |
 | 8 | `extensions/upsell-offer/src/Upsell.tsx` | Storefront API `query`, `@inContext` currency, adding cart lines, `useInstructions`. |
 | 9 | `extensions/delivery-notes/src/DeliveryNotes.tsx` → `DeliveryInstructions` | Order note vs attributes. Protected customer data (`ScopeNotGrantedError`). |
 
@@ -219,10 +219,14 @@ Two things that trip up nearly everyone:
 
 - **`shopify app function typegen`** after every `input.graphql` edit, or your
   `input` stays `any`.
-- **Deployed ≠ active.** A validation Function does nothing until you add it
-  under Settings → Checkout → Checkout rules. A delivery Function needs
-  Settings → Shipping and delivery → Checkout customizations. This is the
-  single most common "my function isn't running" cause.
+- **Deployed ≠ active.** A Function does nothing until it's activated, and
+  for a custom app that means an Admin GraphQL mutation (`validationCreate`,
+  `deliveryCustomizationCreate`) run with `shopify app execute`, after adding
+  the matching `write_…` scope. The STEPS files have the exact commands. This
+  is the single most common "my function isn't running" cause.
+- **A UI extension explains, a Function enforces.** With both lessons live,
+  a PO Box address shows the Function's error on the Address field even when
+  every UI-extension check passes, because it runs on Shopify's servers.
 
 ## Step 6 · Ship it
 

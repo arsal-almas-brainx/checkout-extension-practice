@@ -29,14 +29,13 @@ The CLI creates `extensions/order-rules/` with a correct `shopify.extension.toml
 
 ```bash
 cd "/Users/brainxshopifydev/Desktop/Checkout Extenions"
-cp lessons/06-validation-function/input.graphql   extensions/order-rules/src/
-cp lessons/06-validation-function/validation.ts   extensions/order-rules/src/
+cp lessons/06-validation-function/input.graphql   extensions/order-rules/src/cart_validations_generate_run.graphql
+cp lessons/06-validation-function/validation.ts   extensions/order-rules/src/cart_validations_generate_run.ts
 ```
 
-Then point the toml's `input_query` at `src/input.graphql` if it isn't already,
-and make the file the CLI generated re-export the lesson logic — or just paste
-`validation.ts`'s body into the generated entry file, keeping the **export name
-the CLI generated** (it must match the target, e.g. `cartValidationsGenerateRun`).
+Copying over the CLI's own file names keeps its toml (`input_query`) and
+`src/index.ts` re-export working unchanged. The lesson's function is already
+named `cartValidationsGenerateRun`, matching the target.
 
 ## Generate types, then build
 
@@ -61,6 +60,28 @@ checkout, and it's how you should iterate.
 
 ## Turn it on
 
-A deployed validation Function does nothing until it's activated:
-**Settings → Checkout → Checkout rules → Add rule**, then pick your function.
-Forgetting this step is the most common "my function doesn't work" report.
+A deployed validation Function does nothing until it's activated. Forgetting
+this is the most common "my function doesn't work" report.
+
+> **Verified 2026-11 on a Plus dev store:** there is no "Checkout rules" page
+> in admin for a custom app without its own UI. Activation is an Admin GraphQL
+> mutation, and the mutation needs a scope:
+
+1. In `shopify.app.toml`: `scopes = "write_validations"`, then
+   `shopify app deploy`. Re-open the app's install link in the store admin and
+   approve the update (adding a scope always needs merchant re-approval).
+2. Activate it as the app:
+
+```bash
+shopify app execute -s <store>.myshopify.com --version 2026-07 -q '
+mutation { validationCreate(validation: {functionHandle: "order-rules",
+  title: "Order rules", enable: true, blockOnFailure: false}) {
+  validation { id enabled } userErrors { field message } } }'
+```
+
+`blockOnFailure: false` means a *crash* in your function lets checkout through;
+a returned validation error still blocks. Choose `true` only when letting a bad
+order through is worse than blocking a good one.
+
+The finished, tested version of this lesson lives in `extensions/order-rules/`
+(`npm test` there runs 6 fixtures through the compiled Wasm).

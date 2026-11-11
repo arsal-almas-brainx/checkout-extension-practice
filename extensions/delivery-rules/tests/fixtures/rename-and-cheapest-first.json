@@ -1,0 +1,57 @@
+{
+  "payload": {
+    "export": "cart-delivery-options-transform-run",
+    "target": "cart.delivery-options.transform.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryOptions": [
+              {
+                "handle": "exp",
+                "title": "USPS Priority Mail 2-Day",
+                "cost": {
+                  "amount": "30.0"
+                }
+              },
+              {
+                "handle": "std",
+                "title": "UPS Ground",
+                "cost": {
+                  "amount": "10.0"
+                }
+              }
+            ],
+            "deliveryAddress": {
+              "address1": "Sheikh Zayed Road 1",
+              "address2": null,
+              "provinceCode": "DU"
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "deliveryOptionRename": {
+            "deliveryOptionHandle": "exp",
+            "title": "Express — arrives in 2 days"
+          }
+        },
+        {
+          "deliveryOptionRename": {
+            "deliveryOptionHandle": "std",
+            "title": "Standard — 3 to 5 days"
+          }
+        },
+        {
+          "deliveryOptionMove": {
+            "deliveryOptionHandle": "std",
+            "index": 0
+          }
+        }
+      ]
+    }
+  }
+}

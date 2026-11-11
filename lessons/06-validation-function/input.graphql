@@ -22,8 +22,10 @@ query CartValidationsGenerateRunInput {
         __typename
         ... on ProductVariant {
           id
-          title
           product {
+            # PRODUCT title, not the variant's: a single-variant product's
+            # variant title is literally "Default Title".
+            title
             # Metafields are how you read merchant-configured data inside a
             # Function. There is no admin API access here — a Function is a
             # pure input -> output transform with no network. If your rule

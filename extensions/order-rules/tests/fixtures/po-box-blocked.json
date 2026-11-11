@@ -1,0 +1,46 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "address1": "P.O. Box 42",
+              "address2": null
+            }
+          }
+        ],
+        "lines": [
+          {
+            "quantity": 1,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/1",
+              "product": {
+                "title": "Lab Test Tee",
+                "isWholesale": null,
+                "minimumQuantity": null
+              }
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "We can’t deliver to a PO Box. Please enter a street address.",
+                "target": "$.cart.deliveryGroups[0].deliveryAddress.address1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

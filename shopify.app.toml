@@ -13,7 +13,10 @@ api_version = "2026-10"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = ""
+# Functions are inert until activated by a mutation, and each mutation needs
+# its own scope: validationCreate (Lesson 6) and deliveryCustomizationCreate
+# (Lesson 7). Adding a scope makes the merchant re-approve the app.
+scopes = "write_validations,write_delivery_customizations"
 
 [auth]
 redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]

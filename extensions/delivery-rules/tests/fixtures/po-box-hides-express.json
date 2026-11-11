@@ -1,0 +1,50 @@
+{
+  "payload": {
+    "export": "cart-delivery-options-transform-run",
+    "target": "cart.delivery-options.transform.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryOptions": [
+              {
+                "handle": "exp",
+                "title": "USPS Priority Mail 2-Day",
+                "cost": {
+                  "amount": "30.0"
+                }
+              },
+              {
+                "handle": "std",
+                "title": "UPS Ground",
+                "cost": {
+                  "amount": "10.0"
+                }
+              }
+            ],
+            "deliveryAddress": {
+              "address1": "PO Box 42",
+              "address2": null,
+              "provinceCode": "DU"
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "deliveryOptionHide": {
+            "deliveryOptionHandle": "exp"
+          }
+        },
+        {
+          "deliveryOptionRename": {
+            "deliveryOptionHandle": "std",
+            "title": "Standard — 3 to 5 days"
+          }
+        }
+      ]
+    }
+  }
+}
